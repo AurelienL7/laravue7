@@ -24,3 +24,6 @@ Route::post('/tasksList', 'TaskController@store');
 
 // Edit une task
 Route::get('/tasks/edit/{id}', 'TaskController@edit');
+
+// Edit une task
+Route::patch('/tasks/edit/{id}', 'TaskController@update');

@@ -39,11 +39,10 @@ class TaskController extends Controller
     {
         $task = Task::create($request->all());
 
+        // Si Task est défini, on actualise la liste des taches
         if($task){
-            $tasks = Task::orderBy('created_at', 'DESC')->paginate(3);
-
-            return response()->json($tasks);
-        }
+            return $this->refresh();
+        };
     }
 
     /**
@@ -77,9 +76,17 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
-        //
+        $task = Task::find($id);
+        // Le name de la Task est défini comme étant le name de la requete
+        $task->name = request('name');
+        $task->save();
+
+        // Si Task est défini, on actualise la liste des taches
+        if($task){
+            return $this->refresh();
+        };
     }
 
     /**
@@ -91,5 +98,11 @@ class TaskController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function refresh(){
+
+        $tasks = Task::orderBy('created_at', 'DESC')->paginate(3);
+        return response()->json($tasks);
     }
 }
