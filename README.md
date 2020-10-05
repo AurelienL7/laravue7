@@ -2,5 +2,5 @@
 
 ## About
 
-Laravel 7
-Laravel UI 2.4
+- Laravel 7
+- Laravel UI 2.4
