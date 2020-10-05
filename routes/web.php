@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 // Récupère la liste des tasks
-Route::get('/tasksList', 'TaskController@index');
+Route::get('/tasksList/{q?}', 'TaskController@index');
 // Enregistre les tasks du formulaire en BDD
 Route::post('/tasksList', 'TaskController@store');
 
@@ -27,3 +27,6 @@ Route::get('/tasks/edit/{id}', 'TaskController@edit');
 
 // Edit une task
 Route::patch('/tasks/edit/{id}', 'TaskController@update');
+
+// Supprime une task
+Route::delete('/tasks/{id}', 'TaskController@destroy');

@@ -2083,11 +2083,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       tasks: {},
-      taskToEdit: ''
+      taskToEdit: '',
+      q: ''
     };
   },
   created: function created() {
@@ -2114,6 +2125,32 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('http://127.0.0.1:8000/tasks/edit/' + id).then(function (response) {
         return _this3.taskToEdit = response.data;
+      })["catch"](function (error) {
+        return console.log(error);
+      });
+    },
+    searchTask: function searchTask() {
+      var _this4 = this;
+
+      if (this.q.length > 3) {
+        axios.get('http://127.0.0.1:8000/tasksList/' + this.q).then(function (response) {
+          return _this4.tasks = response.data;
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      } else {
+        axios.get('http://127.0.0.1:8000/tasksList').then(function (response) {
+          return _this4.tasks = response.data;
+        })["catch"](function (error) {
+          return console.log(error);
+        });
+      }
+    },
+    deleteTask: function deleteTask(id) {
+      var _this5 = this;
+
+      axios["delete"]('http://127.0.0.1:8000/tasks/' + id).then(function (response) {
+        return _this5.tasks = response.data;
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -38470,7 +38507,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    attrs: { name: "name", id: "name", rows: "4" },
+                    attrs: { name: "editTask", id: "editTask", rows: "4" },
                     domProps: { value: _vm.taskToEdit.name },
                     on: {
                       input: function($event) {
@@ -38596,7 +38633,41 @@ var render = function() {
     "div",
     { staticClass: "container" },
     [
-      _c("add-task", { on: { "task-added": _vm.refresh } }),
+      _c(
+        "div",
+        { staticClass: "d-flex align-items-center justify-content-between" },
+        [
+          _c("add-task", { on: { "task-added": _vm.refresh } }),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "col-row" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.q,
+                    expression: "q"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Search task..." },
+                domProps: { value: _vm.q },
+                on: {
+                  keyup: _vm.searchTask,
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.q = $event.target.value
+                  }
+                }
+              })
+            ])
+          ])
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "ul",
@@ -38613,23 +38684,39 @@ var render = function() {
               [
                 _c("a", { attrs: { href: "#" } }, [_vm._v(_vm._s(task.name))]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary my-3",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "modal",
-                      "data-target": "#editModal"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.getTask(task.id)
+                _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary my-3",
+                      attrs: {
+                        type: "button",
+                        "data-toggle": "modal",
+                        "data-target": "#editModal"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.getTask(task.id)
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("\n            Edit task\n            ")]
-                )
+                    },
+                    [_vm._v("\n                Edit task\n                ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteTask(task.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
               ]
             )
           }),

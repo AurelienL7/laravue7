@@ -14,6 +14,16 @@ class TaskController extends Controller
      */
     public function index()
     {
+        if(request('q') != null){
+            // Va rechercher les tasks avec un nom correspondant a la requete q
+            // Accepte les caractères avant et après la requete q ('%')
+            // $tasks['data'] est là pour pouvoir boucler sur la data puisqu'on utilise une pagination (???)
+            $tasks['data'] = Task::where('name', 'like', '%' . request('q') . '%')->get();
+            return response()->json($tasks);
+        }else{
+            return $this->refresh();
+        }
+
         $tasks = Task::orderBy('created_at', 'DESC')->paginate(3);
 
         return response()->json($tasks);
@@ -97,7 +107,13 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $task = Task::find($id);
+
+        if($task->delete()){
+            return $this->refresh();
+        }else{
+            return response()->json(['error' => 'Delete method has failed.'], 425);
+        }
     }
 
     private function refresh(){

@@ -15,7 +15,7 @@
                 <form>
                     <div class="form-group">
                         <label for="">Task Name</label>
-                        <textarea name="name" id="name" rows="4" class="form-control" v-model="taskToEdit.name"></textarea>
+                        <textarea name="editTask" id="editTask" rows="4" class="form-control" v-model="taskToEdit.name"></textarea>
                     </div>
                 </form>
             </div>
