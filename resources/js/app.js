@@ -13,6 +13,7 @@ Vue.use(VueRouter);
 
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('add-task', require('./components/AddTaskComponent.vue').default);
+Vue.component('edit-task', require('./components/EditTaskComponent.vue').default);
 
 /**
  * The following block of code may be used to automatically register your

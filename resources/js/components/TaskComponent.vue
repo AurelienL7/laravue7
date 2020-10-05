@@ -2,8 +2,9 @@
     <div class="container">
         <add-task @task-added="refresh"></add-task>
         <ul class="list-group">
-            <li class="list-group-item" v-for="task in tasks.data" :key="task.id">
+            <li class="list-group-item d-flex justify-content-between align-items-center" v-for="task in tasks.data" :key="task.id">
                 <a href="#">{{ task.name }}</a>
+                <edit-task></edit-task>
             </li>
         </ul>
         <pagination :data="tasks" @pagination-change-page="getResults" class="mt-5"></pagination>
