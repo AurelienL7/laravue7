@@ -21,3 +21,6 @@ Route::get('/', function () {
 Route::get('/tasksList', 'TaskController@index');
 // Enregistre les tasks du formulaire en BDD
 Route::post('/tasksList', 'TaskController@store');
+
+// Edit une task
+Route::get('/tasks/edit/{id}', 'TaskController@edit');

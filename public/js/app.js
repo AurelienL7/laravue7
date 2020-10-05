@@ -2010,31 +2010,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['taskToEdit'],
   data: function data() {
     return {
       name: ''
     };
   },
-  methods: {
-    storeTask: function storeTask() {
-      var _this = this;
-
-      axios.post('http://127.0.0.1:8000/tasksList', {
-        name: this.name
-      }).then(function (response) {
-        return _this.$emit('task-added', response);
-      })["catch"](function (error) {
-        return console.log(error);
-      });
-      this.name = "";
-    }
-  }
+  methods: {}
 });
 
 /***/ }),
@@ -2084,10 +2067,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      tasks: {}
+      tasks: {},
+      taskToEdit: ''
     };
   },
   created: function created() {
@@ -2107,6 +2095,15 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('http://127.0.0.1:8000/tasksList?page=' + page).then(function (response) {
         _this2.tasks = response.data;
+      });
+    },
+    getTask: function getTask(id) {
+      var _this3 = this;
+
+      axios.get('http://127.0.0.1:8000/tasks/edit/' + id).then(function (response) {
+        return _this3.taskToEdit = response.data.name;
+      })["catch"](function (error) {
+        return console.log(error);
       });
     },
     refresh: function refresh(tasks) {
@@ -38431,19 +38428,6 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c(
-      "button",
-      {
-        staticClass: "btn btn-primary my-3",
-        attrs: {
-          type: "button",
-          "data-toggle": "modal",
-          "data-target": "#editModal"
-        }
-      },
-      [_vm._v("\n    Edit task\n    ")]
-    ),
-    _vm._v(" "),
-    _c(
       "div",
       {
         staticClass: "modal fade",
@@ -38469,19 +38453,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.name,
-                        expression: "name"
+                        value: _vm.taskToEdit,
+                        expression: "taskToEdit"
                       }
                     ],
                     staticClass: "form-control",
                     attrs: { name: "name", id: "name", rows: "4" },
-                    domProps: { value: _vm.name },
+                    domProps: { value: _vm.taskToEdit },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.name = $event.target.value
+                        _vm.taskToEdit = $event.target.value
                       }
                     }
                   })
@@ -38610,23 +38594,42 @@ var render = function() {
       _c(
         "ul",
         { staticClass: "list-group" },
-        _vm._l(_vm.tasks.data, function(task) {
-          return _c(
-            "li",
-            {
-              key: task.id,
-              staticClass:
-                "list-group-item d-flex justify-content-between align-items-center"
-            },
-            [
-              _c("a", { attrs: { href: "#" } }, [_vm._v(_vm._s(task.name))]),
-              _vm._v(" "),
-              _c("edit-task")
-            ],
-            1
-          )
-        }),
-        0
+        [
+          _vm._l(_vm.tasks.data, function(task) {
+            return _c(
+              "li",
+              {
+                key: task.id,
+                staticClass:
+                  "list-group-item d-flex justify-content-between align-items-center"
+              },
+              [
+                _c("a", { attrs: { href: "#" } }, [_vm._v(_vm._s(task.name))]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary my-3",
+                    attrs: {
+                      type: "button",
+                      "data-toggle": "modal",
+                      "data-target": "#editModal"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.getTask(task.id)
+                      }
+                    }
+                  },
+                  [_vm._v("\n            Edit task\n            ")]
+                )
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _c("edit-task", { attrs: { taskToEdit: _vm.taskToEdit } })
+        ],
+        2
       ),
       _vm._v(" "),
       _c("pagination", {

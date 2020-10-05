@@ -1,11 +1,6 @@
 <template>
     
     <div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary my-3" data-toggle="modal" data-target="#editModal">
-        Edit task
-        </button>
-
         <!-- Modal -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -20,7 +15,7 @@
                 <form>
                     <div class="form-group">
                         <label for="">Task Name</label>
-                        <textarea name="name" id="name" rows="4" class="form-control" v-model="name"></textarea>
+                        <textarea name="name" id="name" rows="4" class="form-control" v-model="taskToEdit"></textarea>
                     </div>
                 </form>
             </div>
@@ -38,6 +33,8 @@
 <script>
 export default {
 
+    props: ['taskToEdit'],
+
     data(){
         return{
             name: ''
@@ -45,14 +42,8 @@ export default {
     },
 
     methods:{
-        storeTask(){
-            axios.post('http://127.0.0.1:8000/tasksList', {
-                name: this.name
-            })
-            .then(response => this.$emit('task-added', response))
-            .catch(error => console.log(error));
-            this.name = ""
-        }
+
+        
     }
 }
 </script>
